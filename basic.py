@@ -1009,9 +1009,9 @@ class Interpreter:
 		i = start_value.value
 		
 		if step_value.value >= 0:
-			condition = lambda: i < end_value.value
+			condition = lambda: i <= end_value.value
 		else:
-			condition = lambda: i > end_value.value
+			condition = lambda: i >= end_value.value
 
 		while condition():
 			context.symbol_table.set(node.var_name_tok.value, Number(i))
