@@ -1142,5 +1142,4 @@ def run(fn, text):
     context = Context('<program>')
     context.symbol_table = global_symbol_table
     result = interpreter.visit(ast.node, context)
-    print(ast.value)
     return result.value, result.error
