@@ -141,7 +141,6 @@ KEYWORDS = [
     'STEP',
     'WHILE',
 	'Void'
-    'END'
 ]
 
 
@@ -238,6 +237,9 @@ class Lexer:
                 self.advance()
             elif self.current_char == '{':
                 tokens.append(Token(TT_ACCOLADE, pos_start=self.pos))
+                self.advance()
+            elif self.current_char == '}':
+                tokens.append(Token(TT_EOF, pos_start=self.pos))
                 self.advance()
             else:
                 pos_start = self.pos.copy()
@@ -1367,7 +1369,7 @@ class Function(BaseFunction):
         return copy
     
     def __repr__(self):
-        return f"<function {self.name}"
+        return f"<function {self.name}>"
 
 class BuiltInFunction(BaseFunction):
     def __init__(self, name):
