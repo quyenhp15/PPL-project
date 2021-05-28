@@ -248,7 +248,7 @@ class Lexer:
                 return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
 
         tokens.append(Token(TT_EOF, pos_start=self.pos))
-        return tokens, None
+        return tokens, None 
 
     def make_string(self):
         string = ''
@@ -1181,6 +1181,8 @@ class Number:
     def added_to(self, other):
         if isinstance(other, Number):
             return Number(self.value + other.value).set_context(self.context), None
+        elif isinstance(other, String):
+            return String(str(self.value)+other.value).set_context(self.context), None
 
     def subbed_by(self, other):
         if isinstance(other, Number):
@@ -1263,6 +1265,8 @@ class String(Value):
      def added_to(self, other):
          if isinstance(other, String):
              return String(self.value+other.value).set_context(self.context), None
+         elif isinstance(other, Number):
+             return String(self.value+str(other.value)).set_context(self.context), None
          else:
              return None, Value.illegal_operation(self,other)
 
@@ -1402,12 +1406,14 @@ class BuiltInFunction(BaseFunction):
         return f"<built-in function {self.name}>"
 
     def execute_print(self, exec_ctx):
-        print(str(exec_ctx.symbol_table.get('value')))
-        return RTResult().success(Number.null)
-    execute_print.arg_names = ['value']
-    def execute_print_ret(self, exec_ctx):
+        # print(str(exec_ctx.symbol_table.get('value')))
         return RTResult().success(String(str(exec_ctx.symbol_table.get('value'))))
-    execute_print_ret.arg_names = ['value']
+    execute_print.arg_names = ['value']
+
+    
+    # def execute_print_ret(self, exec_ctx):
+    #     return RTResult().success(String(str(exec_ctx.symbol_table.get('value'))))
+    # execute_print_ret.arg_names = ['value']
 
     def execute_input(self,exec_ctx):
         text = input()
